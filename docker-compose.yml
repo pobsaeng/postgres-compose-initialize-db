@@ -2,9 +2,7 @@ version: "3.7"
 
 services:
   postgres:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: postgres:10.5
     restart: always
     ports:
       - "5438:5432"
@@ -14,12 +12,12 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-      - ./sql:/docker-entrypoint-initdb.d
+      - ./sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./sql/02_data.sql:/docker-entrypoint-initdb.d/02_data.sql
     logging:
       options:
         max-size: "10m"
         max-file: "3"
-    command: ["docker-entrypoint.sh", "custom_init_script.sh"] # Use a custom entrypoint script
 
   pgadmin:
     image: dpage/pgadmin4
