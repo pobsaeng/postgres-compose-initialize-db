@@ -5,12 +5,17 @@ services:
     container_name: PostgresDB
     image: postgres:10.5
     restart: always
+    # แมป port กำหนดค่าภายในคอนเทนเนอร์โดยเฉพาะ เพื่อหลีกเลี่ยงการ conflict กันกับ port 5432 ซึ่งค่า default ของ
+    # Postgre ทำให้เรียกใช้อินสแตนซ์ PostgreSQL หลายรายการบนเครื่องโฮสต์เดียวกันโดยไม่มีข้อขัดแย้ง
     ports:
       - "5438:5432"
     environment:
-      POSTGRES_USER: myUser
-      POSTGRES_PASSWORD: myUser!234
-      POSTGRES_DB: myDatabase
+      POSTGRES_USER: myUser #กำหนด user สำหรับ postgres
+      POSTGRES_PASSWORD: myUser!234 #กำหนด password สำหรับ postgres
+      POSTGRES_DB: myDatabase #กำหนดชื่อ database สำหรับ postgres
+      #บรรทัด 19 แมปไดเร็กทอรี ./postgres-data บนเครื่องโฮสต์กับไดเร็กทอรี /var/lib/postgresql/data ภายในคอนเทนเนอร์ PostgreSQL
+      #การแมป volumes เพื่อคงข้อมูล PostgreSQL
+      #บรรทัด 20,21 อ่านไฟล์เรียงลำดับตามตัวอักษร กำหนดตัวเลข 01, 02 เพื่อให้ทำงานตามลำดับไฟล์ที่เราต้องการ
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
