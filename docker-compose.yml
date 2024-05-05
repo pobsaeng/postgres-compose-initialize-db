@@ -19,8 +19,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    # command: ["docker-entrypoint.sh", "custom_init_script.sh"] # Use a custom entrypoint script
-
   pgadmin:
     image: dpage/pgadmin4
     restart: always
